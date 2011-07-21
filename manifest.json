@@ -12,12 +12,11 @@
 	},
 	"content_scripts": [{
 		"matches": ["http://*/*"],
-		"js": ["LocalStorageApp.js"]
+		"js": ["LocalStorageContentFile.js"]
 	}],
 	"background_page" : "background.html",
 	"permissions" : [
 		"tabs",
-		"notifications",
 		"http://*/*"
 	]
 }
