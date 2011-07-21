@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="ext-4.0.2a/resources/css/ext-all.css">
+<style>
+body {
+	min-width: 640px;
+	min-height: 480px;
+}
+
+.clear-all {
+	background-image: url(icons/database_delete.png) !important
+}
+</style>
+<script type="text/javascript" src="ext-4.0.2a/ext-all.js"></script>
+<script type="text/javascript">
+Ext.application({
+	name : "LocalStorageManager",
+	launch: function() {
+		Ext.state.Manager.setProvider(Ext.create('Ext.state.LocalStorageProvider'));
+
+		Ext.define("LocalStorageItem", {
+			extend: "Ext.data.Model",
+			fields: ["key", "value"]
+		});
+
+		Ext.define("LocalStorageManager.Proxy", {
+
+			extend: "Ext.data.proxy.Proxy",
+
+			read: function(operation, callback, scope) {
+				var me = this;
+
+				chrome.tabs.getSelected(null, function(tab) {
+					LocalStorageManager.selectedTab = tab;
+
+					chrome.tabs.sendRequest(tab.id, {action : "getLocalStorage"}, function(response) {
+						var records = [];
+						Ext.Array.each(response.localStorage, function(item) {
+							records.push(Ext.create("LocalStorageItem", item));
+						});
+
+						var result = new Ext.data.ResultSet({
+							count : 0,
+							total : 0,
+							loaded : true,
+							success : true,
+							records : records
+						});
+
+						Ext.apply(operation, {
+							resultSet: result
+						});
+
+						operation.setCompleted();
+						operation.setSuccessful();
+						Ext.callback(callback, scope || me, [operation]);
+					});
+				});
+
+
+			}
+		});
+
+		Ext.create('Ext.data.Store', {
+		    storeId:'localStorageStore',
+		    model: "LocalStorageItem",
+		    proxy : Ext.create("LocalStorageManager.Proxy", {}),
+		    autoLoad : true
+		});
+
+		Ext.create("Ext.container.Viewport", {
+				layout : "border",
+				items : [{
+					region: "center",
+					xtype: "gridpanel",
+					stateId: "localStorageGrid",
+					title: "Local Storage Manager",
+					store: "localStorageStore",
+					dockedItems : [{
+						xtype : "toolbar",
+						items : [{
+							text : "Clear all",
+							iconCls : "clear-all",
+							handler : function() {
+								if (Ext.isDefined(LocalStorageManager.selectedTab)) {
+									chrome.tabs.sendRequest(LocalStorageManager.selectedTab.id, {action : "clearLocalStorage"}, function(response) {
+										Ext.data.StoreManager.lookup('localStorageStore').load();
+									});
+								}
+							}
+						}]
+					}],
+					columns: [{
+						header: "Key",
+						dataIndex: "key"
+					}, {
+						header: "Value",
+						dataIndex: "value",
+						flex: 1
+					}]
+				}]
+		});
+
+
+	}
+});
+</script>
+</head>
+
+<body>
+</body>
+
+</html>

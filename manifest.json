@@ -1,0 +1,18 @@
+{
+	"name": "Local Storage Manager",
+	"version": "0.1",
+	"browser_action" : {
+		"default_icon": "icon.png",
+		"default_popup": "popup.html"
+	},
+	"content_scripts": [{
+		"matches": ["http://*/*"],
+		"js": ["LocalStorageApp.js"]
+	}],
+	"background_page" : "background.html",
+	"permissions" : [
+		"tabs",
+		"notifications",
+		"http://*/*"
+	]
+}
