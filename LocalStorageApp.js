@@ -3,7 +3,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 		var responseObject = {
 			localStorage : []
 		};
-		for(i = 0; i < localStorage.length; i++) {
+		for(var i = 0; i < localStorage.length; i++) {
 			var key = localStorage.key(i);
 			var value = localStorage.getItem(key);
 			responseObject.localStorage.push({
