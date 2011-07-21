@@ -14,23 +14,18 @@
     <target name="create-dist" description="Prepares the project for packaging">
     	<delete dir="dist"/>
         <mkdir dir="dist"/>
-
-    	<copy todir="dist/ext-4.0.2a">
-    		<fileset dir="ext-4.0.2a" />
-    	</copy>
-    	<copy todir="dist/icons">
-    		<fileset dir="icons" />
-    	</copy>
     	
-    	<copy todir="dist">
-    		<fileset file="background.html" />
-    		<fileset file="LocalStorageContentFile.js" />
-    		<fileset file="logo128.png" />
-    		<fileset file="logo48.png" />
-    		<fileset file="logo16.png" />
-    		<fileset file="manifest.json" />
-    		<fileset file="popup.html" />
-    	</copy>
+    	<zip destfile="dist/localstoragemanager.zip">
+			<zipfileset dir="ext-4.0.2a" prefix="ext-4.0.2a" />
+			<zipfileset dir="icons" prefix="icons" />
+			<zipfileset file="background.html" />
+    		<zipfileset file="LocalStorageContentFile.js" />
+    		<zipfileset file="logo128.png" />
+    		<zipfileset file="logo48.png" />
+    		<zipfileset file="logo16.png" />
+    		<zipfileset file="manifest.json" />
+    		<zipfileset file="popup.html" />
+    	</zip>
     </target>
 
 </project>
