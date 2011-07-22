@@ -1,7 +1,7 @@
 {
 	"name": "Local Storage Manager",
 	"description" : "Good for developers, that need more controlled interaction with the local storage during development.", 
-	"version": "0.1",
+	"version": "0.2.0",
 	"browser_action" : {
 		"default_icon": "logo16.png",
 		"default_popup": "popup.html"
