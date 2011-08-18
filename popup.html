@@ -98,6 +98,14 @@ Ext.application({
 					dockedItems : [{
 						xtype : "toolbar",
 						items : [{
+							id : "backButton",
+							text : "Back",
+							hidden : true,
+							handler : function() {
+								
+							}
+						},
+						"->", {
 							text : "Clear all",
 							iconCls : "clear-all",
 							handler : function() {
